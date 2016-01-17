@@ -134,7 +134,7 @@ describe("Lenses", function() {
     })
   })
 
-  describe("Isomorphism", function() {
+  describe("Folds", function() {
 
     it('foldMapOf(folded) == foldMap', function() {
       var foldMap = foldMapOf(folded)
