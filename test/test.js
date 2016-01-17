@@ -1,7 +1,6 @@
 const assert = require("assert")
 const L = require('../index')
 const R = require("ramda")
-const Identity = require('../src/internal/_identity')
 const compose = R.compose
 const lensProp = R.lensProp
 const lensIndex = R.lensIndex
@@ -15,11 +14,13 @@ const from = L.from
 const objIpair = L.objIpair
 const folded = L.folded
 const foldMapOf = L.foldMapOf
+const anyOf = L.anyOf
+const sumOf = L.sumOf
+
+const Identity = require('../src/internal/_identity')
 const monoids = require('../src/internal/_monoids')
 const Sum = monoids.Sum
 const Any = monoids.Any
-const anyOf = L.anyOf
-const sumOf = L.sumOf
 
 describe("Lenses", function() {
   const users = [
