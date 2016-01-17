@@ -1,0 +1,17 @@
+{
+  "name": "ramda-lens",
+  "version": "1.0.0",
+  "description": "Lens extensions for ramda js",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ramda": "^0.19.1"
+  },
+  "devDependencies": {
+    "mocha": "^2.3.4"
+  }
+}
