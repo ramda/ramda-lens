@@ -1,6 +1,6 @@
-var _curry3 = require('../node_modules/ramda/src/internal/_curry3');
-
-var Identity = require('./internal/_identity');
+var R = require('ramda')
+var curry = R.curry
+var Identity = require('./internal/_identity')
 
 
 /**
@@ -25,7 +25,7 @@ var Identity = require('./internal/_identity');
  *
  *      R.over(headLens, R.toUpper, ['foo', 'bar', 'baz']); //=> ['FOO', 'bar', 'baz']
  */
-module.exports = _curry3(function over(lens, f, x) {
+module.exports = curry(function over(lens, f, x) {
   return lens(function(y) {
     return Identity(f(y));
   })(x).value;

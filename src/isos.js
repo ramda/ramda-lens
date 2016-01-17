@@ -1,5 +1,6 @@
-var _curry2 = require('../node_modules/ramda/src/internal/_curry2')
-var map = require('../node_modules/ramda/src/map')
+var R = require('ramda')
+var curry = R.curry
+var map = R.map
 
 var isomorphic = function(f, g) {
   var fun = function(x) { return f(x) }
@@ -7,19 +8,19 @@ var isomorphic = function(f, g) {
   return fun;
 }
 
-var from = _curry2(function(i, x) {
+var from = curry(function(i, x) {
   return i.from(x)
 })
 
 var isos = function(ac, ca, bd, db) {
-  return isomorphic(_curry2(function(cfd, a) {
+  return isomorphic(curry(function(cfd, a) {
     return map(db, cfd(ac(a)))
-  }), _curry2(function(afb, c){
+  }), curry(function(afb, c){
     return map(bd, afb(ca(c)))
   }))
 }
 
-var iso = _curry2(function(ab, ba) {
+var iso = curry(function(ab, ba) {
   return isos(ab, ba, ab, ba)
 })
 

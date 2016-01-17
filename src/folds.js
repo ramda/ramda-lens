@@ -1,12 +1,12 @@
-var _curry2 = require('../node_modules/ramda/src/internal/_curry2')
-var _curry3 = require('../node_modules/ramda/src/internal/_curry3')
-var compose = require('../node_modules/ramda/src/compose')
+var R = require('ramda')
+var curry = R.curry
+var compose = R.compose
 var Const = require('./internal/_const')
 var monoids = require('./internal/_monoids')
 
 var _getValue = function(x) { return x.value }
 
-var foldMap = _curry2(function(f, fldable) {
+var foldMap = curry(function(f, fldable) {
   return fldable.reduce(function(acc, x) {
     var r = f(x)
     acc = acc || r.empty()
@@ -14,20 +14,20 @@ var foldMap = _curry2(function(f, fldable) {
   }, null)
 })
 
-var folded = _curry2(function(f, x) {
+var folded = curry(function(f, x) {
   return compose(Const, foldMap(compose(_getValue, f)))(x)
 })
 
-var foldMapOf = _curry3(function(l, f, x) {
+var foldMapOf = curry(function(l, f, x) {
   return compose(_getValue, l(compose(Const, f)))(x)
 })
 
 // Example folds. Needs monoidal types. Ramda fantasy?
-var anyOf = _curry3(function(l, f, xs) {
+var anyOf = curry(function(l, f, xs) {
   return compose(_getValue, foldMapOf(l, compose(monoids.Any, f)))(xs)
 })
 
-var sumOf = _curry2(function(l, xs) {
+var sumOf = curry(function(l, xs) {
   return compose(_getValue, foldMapOf(l, monoids.Sum))(xs)
 })
 

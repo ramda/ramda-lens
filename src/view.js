@@ -1,6 +1,7 @@
-var _curry2 = require('../node_modules/ramda/src/internal/_curry2');
+var R = require('ramda')
+var curry = R.curry
 
-var Const = require('./internal/_const');
+var Const = require('./internal/_const')
 
 
 /**
@@ -24,6 +25,6 @@ var Const = require('./internal/_const');
  *      R.view(xLens, {x: 1, y: 2});  //=> 1
  *      R.view(xLens, {x: 4, y: 2});  //=> 4
  */
-module.exports = _curry2(function view(lens, x) {
+module.exports = curry(function view(lens, x) {
   return lens(Const)(x).value;
 });
