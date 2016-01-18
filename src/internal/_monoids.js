@@ -12,7 +12,7 @@ function Any(x) {
     type: 'Any',
     value: x,
     concat: function(s){ return Any(x || s.value) },
-    empty: function() {return Any(true) }
+    empty: function() {return Any(false) }
   }
 }
 

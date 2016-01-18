@@ -150,8 +150,8 @@ describe("Lenses", function() {
 
     it('works with anyOf', function() {
       var any = anyOf(folded)
-      var res = any(function(x){ return x > 1 }, [1,2,3])
-      assert.equal(res, true)
+      var res = any(function(x){ return x > 4 }, [1,2,3])
+      assert.equal(res, false)
     })
   })
 })
