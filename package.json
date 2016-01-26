@@ -12,10 +12,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ramda": "^0.19.1"
+    "ramda": "0.19.x",
+    "ramda-fantasy": "github:ramda/ramda-fantasy"
   },
   "devDependencies": {
-    "mocha": "^2.3.4",
+    "jsverify": "0.7.x",
+    "mocha": "2.3.x",
     "xyz": "0.5.x"
   }
 }
