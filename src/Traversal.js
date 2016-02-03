@@ -24,8 +24,7 @@ const ixArray = n =>
 // ixObject :: String -> TraversalP (Object a) a
 const ixObject = k =>
   Wander.wander((of, coalg, obj) =>
-    obj.hasOwnProperty(k) ? R.map(v => R.assoc(k, v, obj), coalg(obj[k]))
-                          : of(obj));
+    R.has(k, obj) ? R.map(v => R.assoc(k, v, obj), coalg(obj[k])) : of(obj));
 
 module.exports = {
   traversed,
