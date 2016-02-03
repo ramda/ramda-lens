@@ -8,21 +8,21 @@ const
   Tuple = RF.Tuple;
 
 
-//:: (s -> Tuple a (b -> t)) -> Lens s t a b
+// lens_ :: (s -> Tuple a (b -> t)) -> Lens s t a b
 const lens_ = R.curry((to, pab) =>
   PF.dimap(to, t => Tuple.snd(t)(Tuple.fst(t)), Strong.first(pab)));
 
-//:: (s -> a) -> (s -> b -> t) -> Lens s t a b
+// lens :: (s -> a) -> (s -> b -> t) -> Lens s t a b
 const lens = R.curry((getter, setter) =>
   lens_(s => Tuple(getter(s), b => setter(s, b))));
 
-//:: Lens (Tuple a c) (Tuple b c) a b
+// _1 :: Lens (Tuple a c) (Tuple b c) a b
 const _1 = Strong.first;
 
-//:: Lens (Tuple c a) (Tuple c b) a b
+// _2 :: Lens (Tuple c a) (Tuple c b) a b
 const _2 = Strong.second;
 
-//:: String -> LensP (Object a) (Maybe a)
+// atObject :: String -> LensP (Object a) (Maybe a)
 const atObject = k =>
   lens(obj => R.has(k, obj) ? Maybe.Just(obj[k]) : Maybe.Nothing(),
        (obj, m) => m.isJust ? R.assoc(k, m.value, obj) : R.dissoc(k, obj));

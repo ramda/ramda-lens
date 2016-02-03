@@ -3,7 +3,7 @@ const
   UnitM = require('./Internal/Monoid/Unit');
 
 
-//:: Getter s t a b -> s -> a
+// view :: Getter s t a b -> s -> a
 const view = Fold.foldOf(UnitM);
 
 module.exports = {

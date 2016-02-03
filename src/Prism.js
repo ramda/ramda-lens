@@ -10,18 +10,18 @@ const
   Unit   = {};
 
 
-//:: (b -> t) -> (s -> Either t a) -> Prism s t a b
+// prism :: (b -> t) -> (s -> Either t a) -> Prism s t a b
 const prism = R.curry((to, fro, pab) =>
   PF.dimap(fro, (e => e.value), Choice.right(PF.rmap(to, pab))));
 
-//:: (a -> s) -> (s -> Maybe a) -> PrismP s a
+// prism_ :: (a -> s) -> (s -> Maybe a) -> PrismP s a
 const prism_ = R.curry((to, fro) =>
   prism(to, s => Maybe.maybe(Either.Left(s), Either.Right, fro(s))));
 
-//:: Review s t a b -> b -> t
+// review :: Review s t a b -> b -> t
 const review = R.curry((p, r) => p(Tagged(r)).unTagged);
 
-//:: a -> (a -> Boolean) -> PrismP a Unit
+// nearly :: a -> (a -> Boolean) -> PrismP a Unit
 const nearly = R.curry((x, f) =>
   prism_(() => x, a => f(a) ? Maybe.Just(Unit) : Maybe.Nothing()));
 
@@ -31,19 +31,19 @@ const only = a =>
          x => R.equals(a, x) ? Maybe.Just(Unit)
                              : Maybe.Nothing());
 
-//:: Prism (Either a c) (Either b c) a b
+// _Left :: Prism (Either a c) (Either b c) a b
 const _Left  = Choice.left;
 
-//:: Prism (Either c a) (Either c b) a b
+// _Right :: Prism (Either c a) (Either c b) a b
 const _Right = Choice.right;
 
-//:: Prism (Maybe a) (Maybe b) Unit Unit
+// _Nothing :: Prism (Maybe a) (Maybe b) Unit Unit
 const _Nothing = prism(
   () => Maybe.Nothing(),
   Maybe.maybe(Either.Right(Unit),
               () => Either.Left(Maybe.Nothing())));
 
-//:: Prism (Maybe a) (Maybe b) a b
+// _Just :: Prism (Maybe a) (Maybe b) a b
 const _Just = prism(
   Maybe.Just,
   Maybe.maybe(Either.Left(Maybe.Nothing()),

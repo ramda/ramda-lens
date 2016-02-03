@@ -8,7 +8,7 @@ const
 
 // `Forget` is a `Profunctor` that ignores its covariant type.
 //
-//:: Monoid m => Type m -> (a -> r) -> Forget r a b
+// _Forget :: Monoid m => Type m -> (a -> r) -> Forget r a b
 const _Forget = M => function Forget(z) {
   return {
     runForget: z,

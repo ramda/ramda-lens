@@ -9,7 +9,7 @@ const
 // `Star` lifts a `Functor` into a `Profunctor`. The `Applicative` constraint is
 // only necessary to implement `Choice` and `Wander`.
 //
-//:: Applicative f => Type f -> (a -> f b) -> Star f a b
+// _Star :: Applicative f => Type f -> (a -> f b) -> Star f a b
 const _Star = F => function Star(afb) {
   return {
     runStar: afb,

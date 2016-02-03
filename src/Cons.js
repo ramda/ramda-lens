@@ -10,44 +10,44 @@ const
   Tuple = RF.Tuple;
 
 
-//:: Prism [a] [b] (a, [a]) (b, [b])
+// _Cons :: Prism [a] [b] (a, [a]) (b, [b])
 const _Cons = Prism.prism(
   t => R.prepend(Tuple.fst(t), Tuple.snd(t)),
   R.ifElse(R.isEmpty,
            Either.Left,
            xss => Either.Right(Tuple(R.head(xss), R.tail(xss)))));
 
-//:: Prism [a] [b] ([a], a) ([b], b)
+// _Snoc :: Prism [a] [b] ([a], a) ([b], b)
 const _Snoc = Prism.prism(
   t => R.append(Tuple.snd(t), Tuple.fst(t)),
   R.ifElse(R.isEmpty,
            Either.Left,
            xss => Either.Right(Tuple(R.init(xss), R.last(xss)))));
 
-//:: a -> [a] -> [a]
+// cons :: a -> [a] -> [a]
 const cons = R.curry((x, xs) =>
   Prism.review(_Cons, Tuple(x, xs)));
 
-//:: [a] -> Maybe (Tuple a [a])
+// uncons :: [a] -> Maybe (Tuple a [a])
 const uncons = Fold.preview(_Cons);
 
-//:: [a] -> a -> [a]
+// snoc :: [a] -> a -> [a]
 const snoc = R.curry((xs, x) =>
   Prism.review(_Snoc, Tuple(xs, x)));
 
-//:: [a] -> Maybe (Tuple [a] a)
+// unsnoc :: [a] -> Maybe (Tuple [a] a)
 const unsnoc = Fold.preview(_Snoc);
 
-//:: TraversalP s a
+// _head :: TraversalP s a
 const _head = Category.compose(_Cons, Lens._1);
 
-//:: TraversalP s s
+// _tail :: TraversalP s s
 const _tail = Category.compose(_Cons, Lens._2);
 
-//:: TraversalP s a
+// _init :: TraversalP s a
 const _init = Category.compose(_Snoc, Lens._1);
 
-//:: TraversalP s s
+// _last :: TraversalP s s
 const _last = Category.compose(_Snoc, Lens._2);
 
 module.exports = {

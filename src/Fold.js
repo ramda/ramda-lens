@@ -22,103 +22,103 @@ const
 
 const Unit = {};
 
-//:: Apply f => f a -> f b -> f b -- (*>)
+// _apR :: Apply f => f a -> f b -> f b -- (*>)
 const _apR = R.curry((lAp, rAp) =>
   lAp.map(_ => R.identity).ap(rAp));
 
-//:: Monoid m => Type m -> Fold m s t a b -> (a -> m) -> s -> m
+// foldMapOf :: Monoid m => Type m -> Fold m s t a b -> (a -> m) -> s -> m
 const foldMapOf = R.curry((M, p, f, s) =>
   p(Forget(M)(f)).runForget(s));
 
-//:: Monoid m => Type m -> Fold m s t m b -> s -> m
+// foldOf :: Monoid m => Type m -> Fold m s t m b -> s -> m
 const foldOf = R.curry((M, p, s) =>
   p(Forget(M)(x => x)).runForget(s));
 
-//:: Fold (First a) s t a b -> s -> Maybe a
+// preview :: Fold (First a) s t a b -> s -> Maybe a
 const preview = R.curry((p, s) =>
   foldMapOf(First, p, R.compose(First, Maybe.Just), s).first);
 
-//:: Fold (Endo r) s t a b -> (a -> r -> r) -> r -> s -> r
+// foldrOf :: Fold (Endo r) s t a b -> (a -> r -> r) -> r -> s -> r
 const foldrOf = R.curry((p, f, r, s) =>
   foldMapOf(Endo, p, x => Endo(f(x)), s).runEndo(r));
 
-//:: Fold (Dual (Endo r)) s t a b -> (r -> a -> r) -> r -> s -> r
+// foldlOf :: Fold (Dual (Endo r)) s t a b -> (r -> a -> r) -> r -> s -> r
 const foldlOf = R.curry((p, f, r, s) =>
   foldMapOf(Dual(Endo), p, R.compose(Dual(Endo), Endo, R.flip(f)), s).dual.runEndo(r));
 
-//:: Fold (Conj Boolean) s t a b -> (a -> Boolean) -> s -> Boolean
+// allOf :: Fold (Conj Boolean) s t a b -> (a -> Boolean) -> s -> Boolean
 const allOf = R.curry((p, f, s) =>
   foldMapOf(Conj, p, R.compose(Conj, f), s).toBool);
 
-//:: Fold (Disj Boolean) s t a b -> (a -> Boolean) -> s -> Boolean
+// anyOf :: Fold (Disj Boolean) s t a b -> (a -> Boolean) -> s -> Boolean
 const anyOf = R.curry((p, f, s) =>
   foldMapOf(Disj, p, R.compose(Disj, f), s).toBool);
 
-//:: Fold (Conj Boolean) s t Boolean b -> s -> Boolean
+// andOf :: Fold (Conj Boolean) s t Boolean b -> s -> Boolean
 const andOf = R.curry((p, s) => allOf(p, R.identity, s));
 
-//:: Fold (Disj Boolean) s t Boolean b -> s -> Boolean
+// orOf :: Fold (Disj Boolean) s t Boolean b -> s -> Boolean
 const orOf = R.curry((p, s) => anyOf(p, R.identity, s));
 
-//:: Eq a => Fold (Disj Boolean) s t a b -> a -> s -> Boolean
+// elemOf :: Eq a => Fold (Disj Boolean) s t a b -> a -> s -> Boolean
 const elemOf = R.curry((p, a, s) =>
   anyOf(p, R.equals(a), s));
 
-//:: Eq a => Fold (Conj Boolean) s t a b -> a -> s -> Boolean
+// notElemOf :: Eq a => Fold (Conj Boolean) s t a b -> a -> s -> Boolean
 const notElemOf = R.curry((p, a, s) =>
   allOf(p, x => !R.equals(a, x), s));
 
-//:: Fold (Additive Number) s t Number b -> s -> Number
+// sumOf :: Fold (Additive Number) s t Number b -> s -> Number
 const sumOf = R.curry((p, s) =>
   foldMapOf(Additive, p, Additive, s).toNum);
 
-//:: Fold (Multiplicative Number) s t Number b -> s -> Number
+// productOf :: Fold (Multiplicative Number) s t Number b -> s -> Number
 const productOf = R.curry((p, s) =>
   foldMapOf(Multiplicative, p, Multiplicative, s).toNum);
 
-//:: Fold (Additive Int) s t a b -> s -> Int
+// lengthOf :: Fold (Additive Int) s t a b -> s -> Int
 const lengthOf = R.curry((p, s) =>
   foldMapOf(Additive, p, () => Additive(1), s).toNum);
 
-//:: Fold (First a) s t a b -> s -> Maybe a
+// firstOf :: Fold (First a) s t a b -> s -> Maybe a
 const firstOf = R.curry((p, s) =>
   foldMapOf(First, p, R.compose(First, Maybe.Just), s).first);
 
-//:: Fold (Last a) s t a b -> s -> Maybe a
+// lastOf :: Fold (Last a) s t a b -> s -> Maybe a
 const lastOf = R.curry((p, s) =>
   foldMapOf(Last, p, R.compose(Last, Maybe.Just), s).last);
 
-//:: Ord a => Fold (Endo (Maybe a)) s t a b -> s -> Maybe a
+// maximumOf :: Ord a => Fold (Endo (Maybe a)) s t a b -> s -> Maybe a
 const maximumOf = R.curry((p, s) =>
   foldrOf(p, R.curry((a, m) => Maybe.Just(Maybe.maybe(a, R.max(a), m))), Maybe.Nothing(), s));
 
-//:: Ord a => Fold (Endo (Maybe a)) s t a b -> s -> Maybe a
+// minimumOf :: Ord a => Fold (Endo (Maybe a)) s t a b -> s -> Maybe a
 const minimumOf = R.curry((p, s) =>
   foldrOf(p, a => m => Maybe.Just(Maybe.maybe(a, R.min(a), m)), Maybe.Nothing(), s));
 
-//:: Fold (Endo (Maybe a)) s t a b -> (a -> Boolean) -> s -> Maybe a
+// findOf :: Fold (Endo (Maybe a)) s t a b -> (a -> Boolean) -> s -> Maybe a
 const findOf = R.curry((p, f, s) =>
   foldlOf(p, R.curry((m, a) => m.isJust ? m
                                         : f(a) ? Maybe.Just(a)
                                                : Maybe.Nothing()), Maybe.Nothing(), s));
 
-//:: Applicative f => Type f -> Fold (Endo (f Unit)) s t (f a) b -> s -> f Unit
+// sequenceOf_ :: Applicative f => Type f -> Fold (Endo (f Unit)) s t (f a) b -> s -> f Unit
 const sequenceOf_ = R.curry((fType, p, s) =>
   foldMapOf(Endo, p, R.compose(Endo, _apR), s).runEndo(fType.of(Unit)));
 
-//:: Fold (Endo [a]) s t a b -> s -> [a]
+// toListOf :: Fold (Endo [a]) s t a b -> s -> [a]
 const toListOf = R.curry((p, s) =>
   foldrOf(p, R.prepend, [], s));
 
-//:: Fold (Disj Boolean) s t a b -> s -> Boolean
+// has :: Fold (Disj Boolean) s t a b -> s -> Boolean
 const has = R.curry((p, s) =>
   foldMapOf(Disj, p, () => Disj(true), s).toBool);
 
-//:: Fold (Conj Boolean) s t a b -> s -> Boolean
+// hasnt :: Fold (Conj Boolean) s t a b -> s -> Boolean
 const hasnt = R.curry((p, s) =>
   foldMapOf(Conj, p, () => Conj(false), s).toBool);
 
-//:: Choice p => (a -> Boolean) -> OpticP p a a
+// filtered :: Choice p => (a -> Boolean) -> OpticP p a a
 const filtered = R.curry((f, c) =>
   Profunctor.dimap(R.ifElse(f, Either.Right, Either.Left), e => e.value, Choice.right(c)));
 

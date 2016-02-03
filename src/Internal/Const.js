@@ -1,7 +1,7 @@
 const R = require('ramda');
 
 
-//:: Monoid m => Type m -> a -> Const a b
+// _Const :: Monoid m => Type m -> a -> Const a b
 const _Const = M => {
   function Const(x) {
     return {

@@ -6,7 +6,7 @@ const
 
 // `Tagged` is a `Profunctor` that ignores its contravariant type.
 //
-//:: b -> Tagged a b
+// Tagged :: b -> Tagged a b
 const Tagged = b => ({
   unTagged: b,
   dimap: (_, g) => Tagged(g(b)),

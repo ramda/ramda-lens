@@ -3,14 +3,14 @@ const
   C = require('../../Category');
 
 
-//:: Profunctor p => (a -> b) -> (c -> d) -> p b c -> p a d
+// dimap :: Profunctor p => (a -> b) -> (c -> d) -> p b c -> p a d
 const dimap = R.curry((a2b, c2d, pbc) => {
   if (typeof pbc.dimap === 'function') return pbc.dimap(a2b, c2d);
   if (typeof pbc       === 'function') return a => c2d(pbc(a2b(a)));
   throw new TypeError('Expected Profunctor');
 });
 
-//:: Profunctor p => (a -> b) -> p b c -> p a c
+// lmap :: Profunctor p => (a -> b) -> p b c -> p a c
 const lmap = R.curry((a2b, pbc) => {
   if (typeof pbc.lmap  === 'function') return pbc.lmap(a2b);
   if (typeof pbc.dimap === 'function') return dimap(a2b, x => x, pbc);
@@ -18,7 +18,7 @@ const lmap = R.curry((a2b, pbc) => {
   throw new TypeError('Expected Profunctor');
 });
 
-//:: Profunctor p => (b -> c) -> p a b -> p a c
+// rmap :: Profunctor p => (b -> c) -> p a b -> p a c
 const rmap = R.curry((b2c, pab) => {
   if (typeof pab.rmap  === 'function') return pab.rmap(b2c);
   if (typeof pab.dimap === 'function') return dimap(x => x, b2c, pab);
@@ -26,7 +26,7 @@ const rmap = R.curry((b2c, pab) => {
   throw new TypeError('Expected Profunctor');
 });
 
-//:: Category p, Profunctor p => (a -> b) -> p a b
+// arr :: Category p, Profunctor p => (a -> b) -> p a b
 const arr  = R.curry((Cat, f) => rmap(f, C.id(Cat)));
 
 module.exports = {
