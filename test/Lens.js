@@ -37,7 +37,7 @@ describe('Lens', () => {
 
   describe('lens', () => {
     const k = jsv.sampler(jsv.asciistring)();
-    const l = Lens.lens(R.prop(k), R.flip(R.assoc(k)));
+    const l = Lens.lens(R.prop(k), R.assoc(k));
 
     isLens(l, recordWithKeyArb(k, jsv.json), jsv.json, R.equals, R.equals);
 

@@ -12,9 +12,9 @@ const
 const lens_ = R.curry((to, pab) =>
   PF.dimap(to, t => Tuple.snd(t)(Tuple.fst(t)), Strong.first(pab)));
 
-// lens :: (s -> a) -> (s -> b -> t) -> Lens s t a b
+// lens :: (s -> a) -> (b -> s -> t) -> Lens s t a b
 const lens = R.curry((getter, setter) =>
-  lens_(s => Tuple(getter(s), b => setter(s, b))));
+  lens_(s => Tuple(getter(s), b => setter(b, s))));
 
 // _1 :: Lens (Tuple a c) (Tuple b c) a b
 const _1 = Strong.first;
@@ -25,7 +25,7 @@ const _2 = Strong.second;
 // atObject :: String -> LensP (Object a) (Maybe a)
 const atObject = k =>
   lens(obj => R.has(k, obj) ? Maybe.Just(obj[k]) : Maybe.Nothing(),
-       (obj, m) => m.isJust ? R.assoc(k, m.value, obj) : R.dissoc(k, obj));
+       (m, obj) => m.isJust ? R.assoc(k, m.value, obj) : R.dissoc(k, obj));
 
 module.exports = {
   lens_,
