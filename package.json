@@ -1,9 +1,12 @@
 {
   "name": "ramda-lens",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "Lens extensions for ramda js",
   "main": "index.js",
   "scripts": {
+    "release-major": "xyz --repo git@github.com:ramda/ramda-lens.git --increment major",
+    "release-minor": "xyz --repo git@github.com:ramda/ramda-lens.git --increment minor",
+    "release-patch": "xyz --repo git@github.com:ramda/ramda-lens.git --increment patch",
     "test": "mocha test ."
   },
   "author": "",
@@ -12,6 +15,7 @@
     "ramda": "^0.19.1"
   },
   "devDependencies": {
-    "mocha": "^2.3.4"
+    "mocha": "^2.3.4",
+    "xyz": "0.5.x"
   }
 }
