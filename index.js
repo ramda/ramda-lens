@@ -1,8 +1,12 @@
-var R = require('ramda')
+var R = require('ramda');
 
 module.exports = R.mergeAll([
-  require('./src/lens'),
-  require('./src/folds'),
-  require('./src/isos'),
-  require('./src/traversals')
-])
+  require('./src/Cons'),
+  require('./src/Fold'),
+  require('./src/Getter'),
+  require('./src/Iso'),
+  require('./src/Lens'),
+  require('./src/Prism'),
+  require('./src/Setter'),
+  require('./src/Traversal')
+]);
