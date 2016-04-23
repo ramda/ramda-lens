@@ -9,7 +9,6 @@ const view = L.view
 const over = L.over
 const mapped = L.mapped
 const traversed = L.traversed
-const iso = L.iso
 const from = L.from
 const objIpair = L.objIpair
 const folded = L.folded
@@ -20,7 +19,6 @@ const sumOf = L.sumOf
 const Identity = require('../src/internal/_identity')
 const monoids = require('../src/internal/_monoids')
 const Sum = monoids.Sum
-const Any = monoids.Any
 
 describe("Lenses", function() {
   const users = [
@@ -64,7 +62,6 @@ describe("Lenses", function() {
 
     it('maps over different types to run the getter', function() {
       const res = view(compose(mapped, mapped, name), Identity([{name: 'Bruno'}]))
-      const expected = Identity(['Bruno'])
       assert.deepEqual(res.value, ['Bruno'])
     })
 
