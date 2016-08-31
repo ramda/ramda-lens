@@ -26,7 +26,7 @@ var Identity = require('./internal/_identity')
  *      R.over(headLens, R.toUpper, ['foo', 'bar', 'baz']); //=> ['FOO', 'bar', 'baz']
  */
 module.exports = curry(function over(lens, f, x) {
-  return lens(function(y) {
+  return lens.call(Identity, function(y) {
     return Identity(f(y));
   })(x).value;
 });
