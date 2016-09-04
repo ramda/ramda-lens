@@ -1,4 +1,4 @@
-module.exports = function Identity(x) {
+function Identity(x) {
   return {
     type: 'Identity',
     value: x,
@@ -9,3 +9,7 @@ module.exports = function Identity(x) {
     }
   }
 }
+
+Identity.of = Identity
+
+module.exports = Identity

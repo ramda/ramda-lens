@@ -11,7 +11,6 @@ const mapped = L.mapped
 const traversed = L.traversed
 const from = L.from
 const objIpair = L.objIpair
-const folded = L.folded
 const foldMapOf = L.foldMapOf
 const anyOf = L.anyOf
 const sumOf = L.sumOf
@@ -60,11 +59,6 @@ describe("Lenses", function() {
   describe("Mapping", function() {
     const zips = compose(mapped, addresses, mapped, zip)
 
-    it('maps over different types to run the getter', function() {
-      const res = view(compose(mapped, mapped, name), Identity([{name: 'Bruno'}]))
-      assert.deepEqual(res.value, ['Bruno'])
-    })
-
     it('alters a mapped value', function() {
       const res = over(zips, R.reverse, users)
       assert.equal('11039', res[1].addresses[0].zip)
@@ -81,21 +75,20 @@ describe("Lenses", function() {
   })
 
   describe("Traversing", function() {
-    const trav_fn = function(x) {return [x+1] }
-    const of = function(x){ return [x] }
+    const trav_fn = function(x) { return x+1 }
 
-    it('traverses like traverse', function() {
-      const result = over(traversed(of), trav_fn, Identity(2))
-      const expected = [Identity(3)]
-      assert.deepEqual(result[0].value, expected[0].value)
+    it('over a traversable', function() {
+      const result = over(traversed, trav_fn, Identity(2))
+      const expected = Identity(3)
+      assert.deepEqual(result.value, expected.value)
     })
 
     it('traversals compose', function() {
-      const result = over(compose(mapped, traversed(of)), trav_fn, [Identity(2), Identity(3)])
-      const expected = [[Identity(3)], [Identity(4)]]
+      const result = over(compose(mapped, traversed), trav_fn, [Identity(2), Identity(3)])
+      const expected = [Identity(3), Identity(4)]
       // assert(result == expected) fails so:
-      assert.deepEqual(result[0][0].value, expected[0][0].value)
-      assert.deepEqual(result[1][0].value, expected[1][0].value)
+      assert.deepEqual(result[0].value, expected[0].value)
+      assert.deepEqual(result[1].value, expected[1].value)
     })
   })
 
@@ -133,23 +126,28 @@ describe("Lenses", function() {
 
   describe("Folds", function() {
 
-    it('foldMapOf(folded) == foldMap', function() {
-      var foldMap = foldMapOf(folded)
-      var res = foldMap(Sum, [1,2,3])
+    it('foldMapOf(traversed) == foldMap', function() {
+      var foldMap = foldMapOf(traversed)
+      var res = foldMap(Sum.empty(), Sum, [1,2,3])
       assert.equal(res.value, 6)
     })
 
     it('works with sumOf', function() {
-      var sum = sumOf(folded)
+      var sum = sumOf(traversed)
       var res = sum([1,2,3])
       assert.equal(res, 6)
     })
 
     it('works with anyOf', function() {
-      var any = anyOf(folded)
+      var any = anyOf(traversed)
       var res = any(function(x){ return x > 4 }, [1,2,3])
       assert.equal(res, false)
     })
+
+    it('works with an empty list', function() {
+      var res = foldMapOf(traversed, Sum.empty(), Sum, [])
+      assert.equal(res.value, 0)
+    });
   })
 })
 
