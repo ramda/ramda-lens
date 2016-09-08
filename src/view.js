@@ -1,5 +1,4 @@
-var R = require('ramda')
-var curry = R.curry
+var curry = require('ramda/src/curry')
 var Const = require('./internal/_const')([])
 
 

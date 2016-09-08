@@ -1,8 +1,7 @@
-var R = require('ramda')
-var curry = R.curry
-var compose = R.compose
-var traverse = R.traverse
-var map = R.map
+var curry = require('ramda/src/curry')
+var compose = require('ramda/src/compose')
+var traverse = require('ramda/src/traverse')
+var map = require('ramda/src/map')
 var Identity = require('./internal/_identity')
 
 var _getValue = function(x) { return x.value }
