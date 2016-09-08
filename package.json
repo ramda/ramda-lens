@@ -11,6 +11,10 @@
   },
   "author": "",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ramda/ramda-lens.git"
+  },
   "dependencies": {
     "ramda": "^0.19.1"
   },
