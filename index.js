@@ -1,6 +1,6 @@
-var R = require('ramda')
+var mergeAll = require('ramda/src/mergeAll')
 
-module.exports = R.mergeAll([
+module.exports = mergeAll([
   require('./src/lens'),
   require('./src/folds'),
   require('./src/isos'),

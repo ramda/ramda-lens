@@ -1,6 +1,5 @@
-var R = require('ramda')
-var curry = R.curry
-var compose = R.compose
+var curry = require('ramda/src/curry')
+var compose = require('ramda/src/compose')
 var _Const = require('./internal/_const')
 var monoids = require('./internal/_monoids')
 

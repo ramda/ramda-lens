@@ -1,6 +1,5 @@
-var R = require('ramda')
-var curry = R.curry
-var map = R.map
+var curry = require('ramda/src/curry')
+var map = require('ramda/src/map')
 
 var isomorphic = function(f, g) {
   var fun = function(x) { return f(x) }

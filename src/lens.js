@@ -1,6 +1,5 @@
-var R = require('ramda')
-var set = R.set
-var lens = R.lens
+var set = require('ramda/src/set')
+var lens = require('ramda/src/lens')
 
 
 module.exports = {
