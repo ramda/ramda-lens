@@ -14,6 +14,7 @@ const objIpair = L.objIpair
 const foldMapOf = L.foldMapOf
 const anyOf = L.anyOf
 const sumOf = L.sumOf
+const listOf = L.listOf
 
 const Identity = require('../src/internal/_identity')
 const monoids = require('../src/internal/_monoids')
@@ -142,6 +143,12 @@ describe("Lenses", function() {
       var any = anyOf(traversed)
       var res = any(function(x){ return x > 4 }, [1,2,3])
       assert.equal(res, false)
+    })
+
+    it('works with listOf', function() {
+      var unnest = listOf(compose(traversed, lensProp('x'), traversed))
+      var res = unnest([{ x: [1, 2] }, { x: [3, 4] }, { x: [5, 6] }])
+      assert.deepEqual(res, [1, 2, 3, 4, 5, 6])
     })
 
     it('works with an empty list', function() {
