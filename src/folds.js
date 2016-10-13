@@ -1,5 +1,6 @@
 var curry = require('ramda/src/curry')
 var compose = require('ramda/src/compose')
+var of = require('ramda/src/of');
 var _Const = require('./internal/_const')
 var monoids = require('./internal/_monoids')
 
@@ -22,8 +23,13 @@ var sumOf = curry(function(l, xs) {
   return compose(_getValue, foldMapOf(l, monoids.Sum.empty(), monoids.Sum))(xs)
 })
 
+var listOf = curry(function(l, xs) {
+  return foldMapOf(l, [], of, xs)
+})
+
 module.exports = {
   foldMapOf: foldMapOf,
   anyOf: anyOf,
-  sumOf: sumOf
+  sumOf: sumOf,
+  listOf: listOf
 }
