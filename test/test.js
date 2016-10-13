@@ -9,6 +9,7 @@ const view = L.view
 const over = L.over
 const mapped = L.mapped
 const traversed = L.traversed
+const traverseOf = L.traverseOf
 const from = L.from
 const objIpair = L.objIpair
 const foldMapOf = L.foldMapOf
@@ -82,6 +83,18 @@ describe("Lenses", function() {
       const result = over(traversed, trav_fn, Identity(2))
       const expected = Identity(3)
       assert.deepEqual(result.value, expected.value)
+    })
+
+    it('with applicatives via traverseOf', function() {
+      const everyId = compose(traversed, lensProp('x'));
+      const result = traverseOf(
+        everyId,
+        Identity,
+        function(x) { return Identity(x + 1) },
+        [{ x: 1 }, { x: 2 }, { x: 3 }]
+      )
+      const expected = Identity([{ x: 2 }, { x: 3 }, { x: 4 }])
+      assert(expected.equals(result))
     })
 
     it('traversals compose', function() {
