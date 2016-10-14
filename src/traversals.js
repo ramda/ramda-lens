@@ -14,7 +14,12 @@ var traversed = function(f) {
   return traverse(this.of, f)
 }
 
+var traverseOf = curry(function(lens, ofFn, f, target) {
+  return lens.call({ of: ofFn }, f)(target)
+})
+
 module.exports = {
   mapped: mapped,
-  traversed: traversed
+  traversed: traversed,
+  traverseOf: traverseOf
 }
