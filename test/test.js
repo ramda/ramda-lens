@@ -39,7 +39,7 @@ describe("Lenses", function() {
   const zip = lensProp('zip')
 
 
-  describe("Set/View/Over/LensEq/LensSatisfies", function() {
+  describe("Set/View/ViewOr/Over/LensEq/LensSatisfies", function() {
     const firstStreet = compose(_0, addresses, _0, street)
 
     it('gets the value', function() {
