@@ -7,6 +7,7 @@ const lensIndex = R.lensIndex
 const equals = R.equals
 const set = L.set
 const view = L.view
+const viewOr = L.viewOr
 const over = L.over
 const lensEq = L.lensEq
 const lensSatisfies = L.lensSatisfies
@@ -74,6 +75,17 @@ describe("Lenses", function() {
 
       const resCurried = lensSatisfies(equals('92 Oak St.'))(firstStreet)(users)
       assert.ok(resCurried)
+    })
+
+    it('test "view" of the given data structure, determined by the given lens with default value', function() {
+      const res = viewOr('default street', firstStreet, users)
+      assert.equal('92 Oak St.', res)
+
+      const resDefault = viewOr('default street', lensProp('non-existing-prop'), users)
+      assert.equal('default street', resDefault)
+
+      const resCurried = viewOr('default street')(firstStreet)(users)
+      assert.equal('92 Oak St.', resCurried)
     })
   })
 
