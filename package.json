@@ -19,7 +19,7 @@
     "ramda": "^0.19.1"
   },
   "engines": {
-    "node": "6.1.0"
+    "node": ">=6.1.0"
   },
   "devDependencies": {
     "mocha": "^2.3.4",
