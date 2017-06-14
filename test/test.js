@@ -1,12 +1,16 @@
-const assert = require("assert")
+const assert = require('assert')
 const L = require('../index')
-const R = require("ramda")
+const R = require('ramda')
 const compose = R.compose
 const lensProp = R.lensProp
 const lensIndex = R.lensIndex
+const equals = R.equals
 const set = L.set
 const view = L.view
+const viewOr = L.viewOr
 const over = L.over
+const lensEq = L.lensEq
+const lensSatisfies = L.lensSatisfies
 const mapped = L.mapped
 const traversed = L.traversed
 const traverseOf = L.traverseOf
@@ -35,7 +39,7 @@ describe("Lenses", function() {
   const zip = lensProp('zip')
 
 
-  describe("Set/View/Over", function() {
+  describe("Set/View/ViewOr/Over/LensEq/LensSatisfies", function() {
     const firstStreet = compose(_0, addresses, _0, street)
 
     it('gets the value', function() {
@@ -55,6 +59,33 @@ describe("Lenses", function() {
       assert.equal('92 OAK ST.', res[0].addresses[0].street)
       assert.equal('393 Post Ave.', res[1].addresses[0].street)
       assert.equal('92 Oak St.', users[0].addresses[0].street)
+    })
+
+    it('test if object has a specific value on provided lens', function() {
+      const res = lensEq(firstStreet, '92 Oak St.', users)
+      assert.ok(res)
+
+      const resCurried = lensEq(firstStreet)('92 Oak St.')(users)
+      assert.ok(resCurried)
+    })
+
+    it('test if specified object property at lens satisfies the given predicate', function() {
+      const res = lensSatisfies(equals('92 Oak St.'), firstStreet, users)
+      assert.ok(res)
+
+      const resCurried = lensSatisfies(equals('92 Oak St.'))(firstStreet)(users)
+      assert.ok(resCurried)
+    })
+
+    it('test "view" of the given data structure, determined by the given lens with default value', function() {
+      const res = viewOr('default street', firstStreet, users)
+      assert.equal('92 Oak St.', res)
+
+      const resDefault = viewOr('default street', lensProp('non-existing-prop'), users)
+      assert.equal('default street', resDefault)
+
+      const resCurried = viewOr('default street')(firstStreet)(users)
+      assert.equal('92 Oak St.', resCurried)
     })
   })
 
