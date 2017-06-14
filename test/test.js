@@ -80,9 +80,15 @@ describe("Lenses", function() {
     const trav_fn = function(x) { return x+1 }
 
     it('over a traversable', function() {
-      const result = over(traversed, trav_fn, Identity(2))
-      const expected = Identity(3)
-      assert.deepEqual(result.value, expected.value)
+      const result = over(traversed, trav_fn, [1, 2, 3])
+      const expected = [2, 3, 4]
+      assert.deepEqual(result, expected)
+    })
+
+    it('set a traversable', function() {
+      const result = set(traversed, 3, [1, 2, 3])
+      const expected = [3, 3, 3]
+      assert.deepEqual(result, expected)
     })
 
     it('with applicatives via traverseOf', function() {
